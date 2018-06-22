@@ -3,7 +3,7 @@ PlayState = {};
 window.onload = function () {
   let game = new Phaser.Game(960, 600, Phaser.AUTO, 'game');
   game.state.add('play', PlayState);
-  game.state.start('play');
+  game.state.start('play', true, false, {level: 0});
 };
 
 /* Hero START */
@@ -90,7 +90,7 @@ function Spider(game, x, y) {
   this.body.velocity.x = Spider.SPEED;
 }
 
-Spider.SPEED = 100;
+Spider.SPEED = 500;
 
 Spider.prototype = Object.create(Phaser.Sprite.prototype);
 Spider.prototype.constructor = Spider;
@@ -112,7 +112,7 @@ Spider.prototype.die = function() {
 // create game entities and set up world
 PlayState.create = function() {
   this.game.add.image(0,0, 'background');
-  this._loadLevel(this.game.cache.getJSON('level:1'));
+  this._loadLevel(this.game.cache.getJSON(`level:${this.level}`));
 
   this.sfx = {
     jump:  this.game.add.audio('sfx:jump'),
@@ -125,7 +125,9 @@ PlayState.create = function() {
   this._createHud();
 };
 
-PlayState.init = function() {
+const LEVEL_COUNT = 2;
+
+PlayState.init = function(data) {
   this.game.renderer.renderSession.roundPixels = true;
   this.keys = this.game.input.keyboard.addKeys({
     left: Phaser.KeyCode.LEFT,
@@ -142,6 +144,7 @@ PlayState.init = function() {
 
   this.coinCount = 0;
   this.hasKey = false;
+  this.level = (data.level || 0) % LEVEL_COUNT;
 };
 
 // load all necessary resources
@@ -167,6 +170,7 @@ PlayState.preload = function() {
   this.game.load.audio('sfx:stomp', 'audio/stomp.wav');
   this.game.load.audio('sfx:key', 'audio/key.wav');
   this.game.load.audio('sfx:door', 'audio/door.wav');
+  this.game.load.json('level:0', 'data/level00.json');
   this.game.load.json('level:1', 'data/level01.json');
 };
 
@@ -288,7 +292,7 @@ PlayState._heroVsEnemy = function(hero, enemy) {
     this.sfx.stomp.play(),
     hero.die(),
     hero.events.onKilled.addOnce(function() {
-      this.game.state.restart(true, false);
+      this.game.state.restart(true, false, {level: this.level});
     }, this)
   );
 };
@@ -301,8 +305,7 @@ PlayState._heroVsKey = function(hero, key) {
 
 PlayState._heroVsDoor = function() {
   this.sfx.door.play();
-  this.game.state.restart();
-  // TODO: implement Levels
+  this.game.state.restart(true, false, {level: this.level + 1});
 };
 
 PlayState._handleInput = function() {
