@@ -1,10 +1,12 @@
 PlayState = {};
 
-window.onload = function () {
+var Button = document.getElementById('startGame');
+Button.addEventListener('click', () => {
   let game = new Phaser.Game(960, 600, Phaser.AUTO, 'game');
   game.state.add('play', PlayState);
-  game.state.start('play', true, false, {level: 0});
-};
+  game.state.start('play', true, false, {level: 2});
+  Button.style.display = 'none';
+});
 
 /* Hero START */
 function Hero(game, x, y) {
@@ -29,10 +31,17 @@ Hero.prototype.move = function(direction) {
   this.body.velocity.x = direction * SPEED;
 
   this.body.velocity.x < 0 ? this.scale.x = -1 : this.scale.x = 1;
+
+  if (this.body.onFloor()) {
+    this.die();
+    this.events.onKilled.addOnce(function() {
+      this.game.state.restart(true, false, {level: PlayState.level});
+    }, this);
+  }
 };
 
 Hero.prototype.jump = function() {
-  const JUMP_SPEED = 600;
+  const JUMP_SPEED = 580;
   let canJump = this.body.touching.down;
 
   if(canJump) {
@@ -90,7 +99,7 @@ function Spider(game, x, y) {
   this.body.velocity.x = Spider.SPEED;
 }
 
-Spider.SPEED = 500;
+Spider.SPEED = 200;
 
 Spider.prototype = Object.create(Phaser.Sprite.prototype);
 Spider.prototype.constructor = Spider;
@@ -125,7 +134,7 @@ PlayState.create = function() {
   this._createHud();
 };
 
-const LEVEL_COUNT = 2;
+const LEVEL_COUNT = 3;
 
 PlayState.init = function(data) {
   this.game.renderer.renderSession.roundPixels = true;
@@ -145,6 +154,9 @@ PlayState.init = function(data) {
   this.coinCount = 0;
   this.hasKey = false;
   this.level = (data.level || 0) % LEVEL_COUNT;
+  if (this.level === (LEVEL_COUNT - 1)) {
+    console.log("Last Level");
+  }
 };
 
 // load all necessary resources
@@ -172,6 +184,7 @@ PlayState.preload = function() {
   this.game.load.audio('sfx:door', 'audio/door.wav');
   this.game.load.json('level:0', 'data/level00.json');
   this.game.load.json('level:1', 'data/level01.json');
+  this.game.load.json('level:2', 'data/level02.json');
 };
 
 PlayState.update = function() {
