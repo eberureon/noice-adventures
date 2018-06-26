@@ -154,9 +154,6 @@ PlayState.init = function(data) {
   this.coinCount = 0;
   this.hasKey = false;
   this.level = (data.level || 0) % LEVEL_COUNT;
-  if (this.level === (LEVEL_COUNT - 1)) {
-    console.log("Last Level");
-  }
 };
 
 // load all necessary resources
@@ -286,7 +283,13 @@ PlayState._handleCollisions = function() {
   this.game.physics.arcade.overlap(this.hero, this.key, this._heroVsKey, null, this);
   this.game.physics.arcade.overlap(this.hero, this.door, this._heroVsDoor,
     function(hero, door) {
-      return this.hasKey && hero.body.touching.down;
+      if (this.level === (LEVEL_COUNT - 1) && this.hasKey && hero.body.touching.down) {
+        this.game.destroy();
+        window.alert('Well Done!\nDu hast unser Spiel durchgespielt.');
+        Button.style.display = 'block';
+      } else {
+        return this.hasKey && hero.body.touching.down;
+      }
     }, this);
 };
 
