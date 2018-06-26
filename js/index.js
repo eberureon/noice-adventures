@@ -1,12 +1,18 @@
-PlayState = {};
+let PlayState = {};
 
-var Button = document.getElementById('startGame');
+let Button = document.getElementById('startGame');
 Button.addEventListener('click', () => {
   let game = new Phaser.Game(960, 600, Phaser.AUTO, 'game');
   game.state.add('play', PlayState);
   game.state.start('play', true, false, {level: 0});
   Button.style.display = 'none';
 });
+
+// window.onload = function () {
+//     let game = new Phaser.Game(960, 600, Phaser.AUTO, 'game');
+//     game.state.add('play', PlayState);
+//     game.state.start('play', true, false, {level: 3});
+// };
 
 /* Hero START */
 function Hero(game, x, y) {
@@ -33,6 +39,7 @@ Hero.prototype.move = function(direction) {
   this.body.velocity.x < 0 ? this.scale.x = -1 : this.scale.x = 1;
 
   if (this.body.onFloor()) {
+    PlayState.sfx.stomp.play();
     this.die();
     this.events.onKilled.addOnce(function() {
       this.game.state.restart(true, false, {level: PlayState.level});
@@ -51,9 +58,8 @@ Hero.prototype.jump = function() {
   return canJump;
 };
 
-Hero.prototype.bounce = function() {
-  const BOUNCE_SPEED = 200;
-  this.body.velocity.y = -BOUNCE_SPEED;
+Hero.prototype.bounce = function(bounceSpeed) {
+  this.body.velocity.y = -bounceSpeed;
 };
 
 Hero.prototype._getAnimationName = function() {
@@ -134,7 +140,7 @@ PlayState.create = function() {
   this._createHud();
 };
 
-const LEVEL_COUNT = 3;
+const LEVEL_COUNT = 4;
 
 PlayState.init = function(data) {
   this.game.renderer.renderSession.roundPixels = true;
@@ -154,6 +160,10 @@ PlayState.init = function(data) {
   this.coinCount = 0;
   this.hasKey = false;
   this.level = (data.level || 0) % LEVEL_COUNT;
+
+  if (this.level === 3) {
+      Spider.SPEED = 500;
+  }
 };
 
 // load all necessary resources
@@ -182,6 +192,7 @@ PlayState.preload = function() {
   this.game.load.json('level:0', 'data/level00.json');
   this.game.load.json('level:1', 'data/level01.json');
   this.game.load.json('level:2', 'data/level02.json');
+  this.game.load.json('level:3', 'data/level03.json');
 };
 
 PlayState.update = function() {
@@ -207,8 +218,7 @@ PlayState._loadLevel = function(data) {
   this._spawnDoor(data.door.x, data.door.y);
   this._spawnKey(data.key.x, data.key.y);
 
-  const GRAVITY = 1200;
-  this.game.physics.arcade.gravity.y = GRAVITY;
+  this.game.physics.arcade.gravity.y = 1200;
 };
 
 PlayState._spawnPlatform = function(platform) {
@@ -282,7 +292,7 @@ PlayState._handleCollisions = function() {
   this.game.physics.arcade.overlap(this.hero, this.spiders, this._heroVsEnemy, null, this);
   this.game.physics.arcade.overlap(this.hero, this.key, this._heroVsKey, null, this);
   this.game.physics.arcade.overlap(this.hero, this.door, this._heroVsDoor,
-    function(hero, door) {
+    function(hero) {
       if (this.level === (LEVEL_COUNT - 1) && this.hasKey && hero.body.touching.down) {
         this.game.destroy();
         window.alert('Well Done!\nDu hast unser Spiel durchgespielt.');
@@ -302,7 +312,7 @@ PlayState._heroVsCoin = function(hero, coin) {
 PlayState._heroVsEnemy = function(hero, enemy) {
   hero.body.velocity.y > 0 ? (
     this.sfx.stomp.play(),
-    hero.bounce(),
+    this.level === 3 ? hero.bounce(630) : hero.bounce(200),
     enemy.die()
   ) : (
     this.sfx.stomp.play(),

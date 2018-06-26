@@ -5,6 +5,8 @@ let win;
 function createWindow () {
   win = new BrowserWindow({width: 991, height: 675});
 
+  // TODO: use this to remove the menubar
+  // win.setMenu(null);
   win.loadFile('index.html');
 
   // win.webContents.openDevTools();
