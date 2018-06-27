@@ -131,46 +131,40 @@ PlayState.create = function() {
     door:  this.game.add.audio('sfx:door')
   };
 
-    let me = this;
+    this.startTime = new Date();
+    this.timeElapsed = 0;
 
-    me.startTime = new Date();
-    me.timeElapsed = 0;
+    this.createTimer();
 
-    me.createTimer();
-
-    me.gameTimer = this.game.time.events.loop(100, () => {
-        me.updateTimer();
+    this.gameTimer = this.game.time.events.loop(100, () => {
+        this.updateTimer();
     });
 
   this._createHud();
 };
 
 PlayState.createTimer = function() {
-  let me = this;
-
-    me.timeLabel = me.game.add.text(me.game.world.centerX, 10, "00:00", {font: "50px Arial", fill: "#fff"});
-    me.timeLabel.anchor.setTo(0.5, 0);
-    me.timeLabel.align = 'center';
+    this.timeLabel = this.game.add.text(this.game.world.centerX, 10, "00:00", {font: "50px Arial", fill: "#fff"});
+    this.timeLabel.anchor.setTo(0.5, 0);
+    this.timeLabel.align = 'center';
 }
 
 PlayState.updateTimer = function () {
-  let me = this;
-
   let currentTime = new Date();
-  let timeDifference = me.startTime.getTime() - currentTime.getTime();
+  let timeDifference = this.startTime.getTime() - currentTime.getTime();
 
   // Time elapsed in seconds
-  me.timeElapsed = Math.abs(timeDifference / 1000);
+  this.timeElapsed = Math.abs(timeDifference / 1000);
 
   // Convert seconds into minutes and seconds
-  let minutes = Math.floor(me.timeElapsed / 60);
-  let seconds = Math.floor(me.timeElapsed) - (60 * minutes);
+  let minutes = Math.floor(this.timeElapsed / 60);
+  let seconds = Math.floor(this.timeElapsed) - (60 * minutes);
 
   let result = (minutes < 10) ? '0' + minutes : minutes;
 
   result += (seconds < 10) ? ':0' + seconds : ':' + seconds;
 
-  me.timeLabel.text = result;
+  this.timeLabel.text = result;
 }
 
 const LEVEL_COUNT = 5;
@@ -330,13 +324,13 @@ PlayState._handleCollisions = function() {
       if (this.level === (LEVEL_COUNT - 1) && this.hasKey && hero.body.touching.down) {
         this.game.destroy();
         setTimeout(() => {
-            window.alert('Well Done!\n' +
-                'Level ' + playerData.level[0] + '\n\t\t Zeit: ' + playerData.times[0] + '\n\t\t Coins: ' + playerData.coins[0] + '\n\n' +
-                'Level ' + playerData.level[1] + '\n\t\t Zeit: ' + playerData.times[1] + '\n\t\t Coins: ' + playerData.coins[1] + '\n\n' +
-                'Level ' + playerData.level[2] + '\n\t\t Zeit: ' + playerData.times[2] + '\n\t\t Coins: ' + playerData.coins[2] + '\n\n' +
-                'Level ' + playerData.level[3] + '\n\t\t Zeit: ' + playerData.times[3] + '\n\t\t Coins: ' + playerData.coins[3] + '\n\n' +
-                'Level ' + playerData.level[4] + '\n\t\t Zeit: ' + playerData.times[4] + '\n\t\t Coins: ' + playerData.coins[4]);
-            Button.style.display = 'block';
+            window.alert("Well Done!\nYou've completed the Game!\n\n" +
+                "Level " + playerData.level[0] + "\n\t\tTime: " + playerData.times[0] + "\n\t\tCoins: " + playerData.coins[0] + "\n\n" +
+                "Level " + playerData.level[1] + "\n\t\tTime: " + playerData.times[1] + "\n\t\tCoins: " + playerData.coins[1] + "\n\n" +
+                "Level " + playerData.level[2] + "\n\t\tTime: " + playerData.times[2] + "\n\t\tCoins: " + playerData.coins[2] + "\n\n" +
+                "Level " + playerData.level[3] + "\n\t\tTime: " + playerData.times[3] + "\n\t\tCoins: " + playerData.coins[3] + "\n\n" +
+                "Level " + playerData.level[4] + "\n\t\tTime: " + playerData.times[4] + "\n\t\tCoins: " + playerData.coins[4]);
+            Button.style.display = "block";
             playerData.level = [];
             playerData.times = [];
             playerData.coins = [];

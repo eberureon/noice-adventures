@@ -3,7 +3,7 @@ const {app, BrowserWindow} = require('electron');
 let win;
 
 function createWindow () {
-  win = new BrowserWindow({width: 991, height: 675});
+  win = new BrowserWindow({width: 991, height: 655});
 
   // TODO: use this to remove the menubar and resize the BrowserWindow height to 655
   // win.setMenu(null);
