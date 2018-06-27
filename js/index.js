@@ -4,15 +4,15 @@ let Button = document.getElementById('startGame');
 Button.addEventListener('click', () => {
   let game = new Phaser.Game(960, 600, Phaser.AUTO, 'game');
   game.state.add('play', PlayState);
-  game.state.start('play', true, false, {level: 0});
+  game.state.start('play', true, false, {level: 4});
   Button.style.display = 'none';
 });
 
 // window.onload = function () {
-//     let game = new Phaser.Game(960, 600, Phaser.AUTO, 'game');
-//     game.state.add('play', PlayState);
-//     game.state.start('play', true, false, {level: 3});
-// };
+//   let game = new Phaser.Game(960, 600, Phaser.AUTO, 'game');
+//   game.state.add('play', PlayState);
+//   game.state.start('play', true, false, {level: 4});
+// }
 
 /* Hero START */
 function Hero(game, x, y) {
@@ -140,7 +140,7 @@ PlayState.create = function() {
   this._createHud();
 };
 
-const LEVEL_COUNT = 4;
+const LEVEL_COUNT = 5;
 
 PlayState.init = function(data) {
   this.game.renderer.renderSession.roundPixels = true;
@@ -193,6 +193,7 @@ PlayState.preload = function() {
   this.game.load.json('level:1', 'data/level01.json');
   this.game.load.json('level:2', 'data/level02.json');
   this.game.load.json('level:3', 'data/level03.json');
+  this.game.load.json('level:4', 'data/level04.json');
 };
 
 PlayState.update = function() {

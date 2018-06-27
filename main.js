@@ -5,7 +5,7 @@ let win;
 function createWindow () {
   win = new BrowserWindow({width: 991, height: 675});
 
-  // TODO: use this to remove the menubar
+  // TODO: use this to remove the menubar and resize the BrowserWindow height to 655
   // win.setMenu(null);
   win.loadFile('index.html');
 
