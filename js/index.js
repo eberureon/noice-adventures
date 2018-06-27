@@ -8,12 +8,6 @@ Button.addEventListener('click', () => {
   Button.style.display = 'none';
 });
 
-// window.onload = function () {
-//   let game = new Phaser.Game(960, 600, Phaser.AUTO, 'game');
-//   game.state.add('play', PlayState);
-//   game.state.start('play', true, false, {level: 4});
-// }
-
 /* Hero START */
 function Hero(game, x, y) {
   // call the Phaser.Sprite constructor
@@ -137,8 +131,47 @@ PlayState.create = function() {
     door:  this.game.add.audio('sfx:door')
   };
 
+    let me = this;
+
+    me.startTime = new Date();
+    me.timeElapsed = 0;
+
+    me.createTimer();
+
+    me.gameTimer = this.game.time.events.loop(100, () => {
+        me.updateTimer();
+    });
+
   this._createHud();
 };
+
+PlayState.createTimer = function() {
+  let me = this;
+
+    me.timeLabel = me.game.add.text(me.game.world.centerX, 10, "00:00", {font: "50px Arial", fill: "#fff"});
+    me.timeLabel.anchor.setTo(0.5, 0);
+    me.timeLabel.align = 'center';
+}
+
+PlayState.updateTimer = function () {
+  let me = this;
+
+  let currentTime = new Date();
+  let timeDifference = me.startTime.getTime() - currentTime.getTime();
+
+  // Time elapsed in seconds
+  me.timeElapsed = Math.abs(timeDifference / 1000);
+
+  // Convert seconds into minutes and seconds
+  let minutes = Math.floor(me.timeElapsed / 60);
+  let seconds = Math.floor(me.timeElapsed) - (60 * minutes);
+
+  let result = (minutes < 10) ? '0' + minutes : minutes;
+
+  result += (seconds < 10) ? ':0' + seconds : ':' + seconds;
+
+  me.timeLabel.text = result;
+}
 
 const LEVEL_COUNT = 5;
 
@@ -296,8 +329,19 @@ PlayState._handleCollisions = function() {
     function(hero) {
       if (this.level === (LEVEL_COUNT - 1) && this.hasKey && hero.body.touching.down) {
         this.game.destroy();
-        window.alert('Well Done!\nDu hast unser Spiel durchgespielt.');
-        Button.style.display = 'block';
+        setTimeout(() => {
+            window.alert('Well Done!\n' +
+                'Du hast unser Spiel durchgespielt.\n' +
+                'Deine Zeit in Level ' + playerData.level[0] + ' ist ' + playerData.times[0] + ' und du hast ' + playerData.coins[0] + ' Coins gesammelt\n' +
+                'Deine Zeit in Level ' + playerData.level[1] + ' ist ' + playerData.times[1] + ' und du hast ' + playerData.coins[1] + ' Coins gesammelt\n' +
+                'Deine Zeit in Level ' + playerData.level[2] + ' ist ' + playerData.times[2] + ' und du hast ' + playerData.coins[2] + ' Coins gesammelt\n' +
+                'Deine Zeit in Level ' + playerData.level[3] + ' ist ' + playerData.times[3] + ' und du hast ' + playerData.coins[3] + ' Coins gesammelt\n' +
+                'Deine Zeit in Level ' + playerData.level[4] + ' ist ' + playerData.times[4] + ' und du hast ' + playerData.coins[4] + ' Coins gesammelt');
+            Button.style.display = 'block';
+            playerData.level = [];
+            playerData.times = [];
+            playerData.coins = [];
+        }, 1000);
       } else {
         return this.hasKey && hero.body.touching.down;
       }
@@ -330,7 +374,16 @@ PlayState._heroVsKey = function(hero, key) {
   this.hasKey = true;
 };
 
+let playerData = {
+  times: [],
+  coins: [],
+  level: []
+};
+
 PlayState._heroVsDoor = function() {
+  playerData.level.push(this.level + 1);
+  playerData.times.push(this.timeLabel.text);
+  playerData.coins.push(this.coinCount);
   this.sfx.door.play();
   this.game.state.restart(true, false, {level: this.level + 1});
 };
