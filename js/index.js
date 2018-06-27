@@ -331,12 +331,11 @@ PlayState._handleCollisions = function() {
         this.game.destroy();
         setTimeout(() => {
             window.alert('Well Done!\n' +
-                'Du hast unser Spiel durchgespielt.\n' +
-                'Deine Zeit in Level ' + playerData.level[0] + ' ist ' + playerData.times[0] + ' und du hast ' + playerData.coins[0] + ' Coins gesammelt\n' +
-                'Deine Zeit in Level ' + playerData.level[1] + ' ist ' + playerData.times[1] + ' und du hast ' + playerData.coins[1] + ' Coins gesammelt\n' +
-                'Deine Zeit in Level ' + playerData.level[2] + ' ist ' + playerData.times[2] + ' und du hast ' + playerData.coins[2] + ' Coins gesammelt\n' +
-                'Deine Zeit in Level ' + playerData.level[3] + ' ist ' + playerData.times[3] + ' und du hast ' + playerData.coins[3] + ' Coins gesammelt\n' +
-                'Deine Zeit in Level ' + playerData.level[4] + ' ist ' + playerData.times[4] + ' und du hast ' + playerData.coins[4] + ' Coins gesammelt');
+                'Level ' + playerData.level[0] + '\n\t\t Zeit: ' + playerData.times[0] + '\n\t\t Coins: ' + playerData.coins[0] + '\n\n' +
+                'Level ' + playerData.level[1] + '\n\t\t Zeit: ' + playerData.times[1] + '\n\t\t Coins: ' + playerData.coins[1] + '\n\n' +
+                'Level ' + playerData.level[2] + '\n\t\t Zeit: ' + playerData.times[2] + '\n\t\t Coins: ' + playerData.coins[2] + '\n\n' +
+                'Level ' + playerData.level[3] + '\n\t\t Zeit: ' + playerData.times[3] + '\n\t\t Coins: ' + playerData.coins[3] + '\n\n' +
+                'Level ' + playerData.level[4] + '\n\t\t Zeit: ' + playerData.times[4] + '\n\t\t Coins: ' + playerData.coins[4]);
             Button.style.display = 'block';
             playerData.level = [];
             playerData.times = [];
