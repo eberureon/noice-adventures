@@ -167,7 +167,7 @@ PlayState.updateTimer = function () {
   this.timeLabel.text = result;
 }
 
-const LEVEL_COUNT = 5;
+const LEVEL_COUNT = 6;
 
 PlayState.init = function(data) {
   this.game.renderer.renderSession.roundPixels = true;
@@ -188,7 +188,7 @@ PlayState.init = function(data) {
   this.hasKey = false;
   this.level = (data.level || 0) % LEVEL_COUNT;
 
-  if (this.level === 3) {
+  if (this.level === 3 || this.level === 5) {
       Spider.SPEED = 500;
   }
 };
@@ -221,6 +221,7 @@ PlayState.preload = function() {
   this.game.load.json('level:2', 'data/level02.json');
   this.game.load.json('level:3', 'data/level03.json');
   this.game.load.json('level:4', 'data/level04.json');
+  this.game.load.json('level:5', 'data/level05.json');
 };
 
 PlayState.update = function() {
@@ -329,7 +330,8 @@ PlayState._handleCollisions = function() {
                 "Level " + playerData.level[1] + "\n\t\tTime: " + playerData.times[1] + "\n\t\tCoins: " + playerData.coins[1] + "\n\n" +
                 "Level " + playerData.level[2] + "\n\t\tTime: " + playerData.times[2] + "\n\t\tCoins: " + playerData.coins[2] + "\n\n" +
                 "Level " + playerData.level[3] + "\n\t\tTime: " + playerData.times[3] + "\n\t\tCoins: " + playerData.coins[3] + "\n\n" +
-                "Level " + playerData.level[4] + "\n\t\tTime: " + playerData.times[4] + "\n\t\tCoins: " + playerData.coins[4]);
+                "Level " + playerData.level[4] + "\n\t\tTime: " + playerData.times[4] + "\n\t\tCoins: " + playerData.coins[4] + "\n\n" +
+                "Level " + playerData.level[5] + "\n\t\tTime: " + playerData.times[5] + "\n\t\tCoins: " + playerData.coins[5]);
             Button.style.display = "block";
             playerData.level = [];
             playerData.times = [];

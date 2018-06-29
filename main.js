@@ -9,8 +9,6 @@ function createWindow () {
   win.setMenu(null);
   win.loadFile('index.html');
 
-  // win.webContents.openDevTools();
-
   win.on('closed', () => {
     win = null
   })
