@@ -4,7 +4,7 @@ let Button = document.getElementById('startGame');
 Button.addEventListener('click', () => {
   let game = new Phaser.Game(960, 600, Phaser.AUTO, 'game');
   game.state.add('play', PlayState);
-  game.state.start('play', true, false, {level: 0});
+  game.state.start('play', true, false, {level: 6}); // TESTING
   Button.style.display = 'none';
 });
 
@@ -33,11 +33,11 @@ Hero.prototype.move = function(direction) {
   this.body.velocity.x < 0 ? this.scale.x = -1 : this.scale.x = 1;
 
   if (this.body.onFloor()) {
-    PlayState.sfx.stomp.play();
-    this.die();
+    PlayState.sfx.stomp.play(),
+    this.die(),
     this.events.onKilled.addOnce(function() {
       this.game.state.restart(true, false, {level: PlayState.level});
-    }, this);
+    }, this)
   }
 };
 
@@ -167,7 +167,7 @@ PlayState.updateTimer = function () {
   this.timeLabel.text = result;
 }
 
-const LEVEL_COUNT = 6;
+const LEVEL_COUNT = 7;
 
 PlayState.init = function(data) {
   this.game.renderer.renderSession.roundPixels = true;
@@ -222,6 +222,7 @@ PlayState.preload = function() {
   this.game.load.json('level:3', 'data/level03.json');
   this.game.load.json('level:4', 'data/level04.json');
   this.game.load.json('level:5', 'data/level05.json');
+  this.game.load.json('level:6', 'data/level06.json');
 };
 
 PlayState.update = function() {
