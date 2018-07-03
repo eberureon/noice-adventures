@@ -350,16 +350,14 @@ PlayState._heroVsCoin = function(hero, coin) {
 };
 
 PlayState._heroVsEnemy = function(hero, enemy) {
+  let heroPosition = this.game.cache.getJSON(`level:${this.level}`).hero;
   hero.body.velocity.y > 0 ? (
     this.sfx.stomp.play(),
     this.level === 3 ? hero.bounce(630) : hero.bounce(200),
     enemy.die()
   ) : (
     this.sfx.stomp.play(),
-    hero.die(),
-    hero.events.onKilled.addOnce(function() {
-      this.game.state.restart(true, false, {level: this.level});
-    }, this)
+    hero.reset(heroPosition.x, heroPosition.y)
   );
 };
 
