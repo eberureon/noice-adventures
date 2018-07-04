@@ -33,7 +33,6 @@ Hero.prototype.move = function(direction) {
   this.body.velocity.x < 0 ? this.scale.x = -1 : this.scale.x = 1;
 
   if (this.body.onFloor()) {
-    PlayState.sfx.stomp.play(),
     this.die(),
     this.events.onKilled.addOnce(function() {
       this.game.state.restart(true, false, {level: PlayState.level});
@@ -65,7 +64,7 @@ Hero.prototype._getAnimationName = function() {
   this.body.velocity.x !== 0 && this.body.touching.down ? name = 'run' : name = 'stop';
 
   return name;
-}
+};
 
 Hero.prototype.update = function() {
   let animationName = this._getAnimationName();
@@ -81,7 +80,7 @@ Hero.prototype.die = function() {
   this.animations.play('die').onComplete.addOnce(function() {
     this.kill();
   }, this);
-}
+};
 /* Hero END */
 
 /* Spider START */
@@ -107,7 +106,7 @@ Spider.prototype.constructor = Spider;
 Spider.prototype.update = function() {
   this.body.touching.right || this.body.blocked.right ? this.body.velocity.x = -Spider.SPEED :
   this.body.touching.left || this.body.blocked.left ? this.body.velocity.x = Spider.SPEED : null;
-}
+};
 
 Spider.prototype.die = function() {
   this.body.enable = false;
@@ -115,7 +114,7 @@ Spider.prototype.die = function() {
   this.animations.play('die').onComplete.addOnce(function() {
     this.kill();
   }, this);
-}
+};
 /* Spider END */
 
 // create game entities and set up world
@@ -128,10 +127,12 @@ PlayState.create = function() {
     coin:  this.game.add.audio('sfx:coin'),
     stomp: this.game.add.audio('sfx:stomp'),
     key:   this.game.add.audio('sfx:key'),
-    door:  this.game.add.audio('sfx:door')
+    door:  this.game.add.audio('sfx:nice', 3)
   };
 
-    this.startTime = new Date();
+  this.bgm = this.game.add.audio('bgm', 0.5, true).play();
+
+  this.startTime = new Date();
     this.timeElapsed = 0;
 
     this.createTimer();
@@ -143,29 +144,16 @@ PlayState.create = function() {
   this._createHud();
 };
 
-PlayState.createTimer = function() {
-    this.timeLabel = this.game.add.text(this.game.world.centerX, 10, "00:00", {font: "50px Arial", fill: "#fff"});
-    this.timeLabel.anchor.setTo(0.5, 0);
-    this.timeLabel.align = 'center';
-}
+PlayState.update = function() {
+  this._handleCollisions();
+  this._handleInput();
+  this.coinFont.text = `x${this.coinCount}`;
+  this.keyIcon.frame = !this.hasKey ? 0 : 1;
+};
 
-PlayState.updateTimer = function () {
-  let currentTime = new Date();
-  let timeDifference = this.startTime.getTime() - currentTime.getTime();
-
-  // Time elapsed in seconds
-  this.timeElapsed = Math.abs(timeDifference / 1000);
-
-  // Convert seconds into minutes and seconds
-  let minutes = Math.floor(this.timeElapsed / 60);
-  let seconds = Math.floor(this.timeElapsed) - (60 * minutes);
-
-  let result = (minutes < 10) ? '0' + minutes : minutes;
-
-  result += (seconds < 10) ? ':0' + seconds : ':' + seconds;
-
-  this.timeLabel.text = result;
-}
+PlayState.shutdown = function () {
+  this.bgm.stop();
+};
 
 const LEVEL_COUNT = 7;
 
@@ -189,8 +177,32 @@ PlayState.init = function(data) {
   this.level = (data.level || 0) % LEVEL_COUNT;
 
   if (this.level === 3 || this.level === 5) {
-      Spider.SPEED = 500;
+    Spider.SPEED = 500;
   }
+};
+
+PlayState.createTimer = function() {
+    this.timeLabel = this.game.add.text(this.game.world.centerX, 10, "00:00", {font: "50px Arial", fill: "#fff"});
+    this.timeLabel.anchor.setTo(0.5, 0);
+    this.timeLabel.align = 'center';
+};
+
+PlayState.updateTimer = function () {
+  let currentTime = new Date();
+  let timeDifference = this.startTime.getTime() - currentTime.getTime();
+
+  // Time elapsed in seconds
+  this.timeElapsed = Math.abs(timeDifference / 1000);
+
+  // Convert seconds into minutes and seconds
+  let minutes = Math.floor(this.timeElapsed / 60);
+  let seconds = Math.floor(this.timeElapsed) - (60 * minutes);
+
+  let result = (minutes < 10) ? '0' + minutes : minutes;
+
+  result += (seconds < 10) ? ':0' + seconds : ':' + seconds;
+
+  this.timeLabel.text = result;
 };
 
 // load all necessary resources
@@ -215,7 +227,8 @@ PlayState.preload = function() {
   this.game.load.audio('sfx:coin', 'audio/coin.wav');
   this.game.load.audio('sfx:stomp', 'audio/stomp.wav');
   this.game.load.audio('sfx:key', 'audio/key.wav');
-  this.game.load.audio('sfx:door', 'audio/door.wav');
+  this.game.load.audio('sfx:nice', 'audio/nice.wav');
+  this.game.load.audio('bgm', ['audio/bgm.mp3', 'audio/bgm.ogg']);
   this.game.load.json('level:0', 'data/level00.json');
   this.game.load.json('level:1', 'data/level01.json');
   this.game.load.json('level:2', 'data/level02.json');
@@ -223,13 +236,6 @@ PlayState.preload = function() {
   this.game.load.json('level:4', 'data/level04.json');
   this.game.load.json('level:5', 'data/level05.json');
   this.game.load.json('level:6', 'data/level06.json');
-};
-
-PlayState.update = function() {
-  this._handleCollisions();
-  this._handleInput();
-  this.coinFont.text = `x${this.coinCount}`;
-  this.keyIcon.frame = !this.hasKey ? 0 : 1;
 };
 
 PlayState._loadLevel = function(data) {
@@ -352,13 +358,16 @@ PlayState._heroVsCoin = function(hero, coin) {
 
 PlayState._heroVsEnemy = function(hero, enemy) {
   let heroPosition = this.game.cache.getJSON(`level:${this.level}`).hero;
+  let keyPosition = this.game.cache.getJSON(`level:${this.level}`).key;
   hero.body.velocity.y > 0 ? (
     this.sfx.stomp.play(),
     this.level === 3 ? hero.bounce(630) : hero.bounce(200),
     enemy.die()
   ) : (
     this.sfx.stomp.play(),
-    hero.reset(heroPosition.x, heroPosition.y)
+    this.hero.reset(heroPosition.x, heroPosition.y),
+    this.key.reset(keyPosition.x, keyPosition.y),
+    this.hasKey = false
   );
 };
 
