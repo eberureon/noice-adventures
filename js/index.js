@@ -32,11 +32,11 @@ Hero.prototype.move = function(direction) {
 
   this.body.velocity.x < 0 ? this.scale.x = -1 : this.scale.x = 1;
 
+  let gameCache = PlayState.game.cache.getJSON(`level:${PlayState.level}`);
   if (this.body.onFloor()) {
-    this.die(),
-    this.events.onKilled.addOnce(function() {
-      this.game.state.restart(true, false, {level: PlayState.level});
-    }, this)
+      PlayState.hero.reset(gameCache.hero.x, gameCache.hero.y);
+      PlayState.key.reset(gameCache.key.x, gameCache.key.y);
+      PlayState.hasKey = false
   }
 };
 
@@ -123,14 +123,14 @@ PlayState.create = function() {
   this._loadLevel(this.game.cache.getJSON(`level:${this.level}`));
 
   this.sfx = {
-    jump:  this.game.add.audio('sfx:jump'),
-    coin:  this.game.add.audio('sfx:coin'),
-    stomp: this.game.add.audio('sfx:stomp'),
-    key:   this.game.add.audio('sfx:key'),
-    door:  this.game.add.audio('sfx:nice', 3)
+    jump:  this.game.add.audio('sfx:jump', 0.2),
+    coin:  this.game.add.audio('sfx:coin', 0.2),
+    stomp: this.game.add.audio('sfx:stomp', 0.4),
+    key:   this.game.add.audio('sfx:key', 0.2),
+    door:  this.game.add.audio('sfx:nice', 7)
   };
 
-  this.bgm = this.game.add.audio('bgm', 0.5, true).play();
+  this.bgm = this.game.add.audio('bgm', 0.6, true).play();
 
   this.startTime = new Date();
     this.timeElapsed = 0;
@@ -155,7 +155,7 @@ PlayState.shutdown = function () {
   this.bgm.stop();
 };
 
-const LEVEL_COUNT = 7;
+const LEVEL_COUNT = 6;
 
 PlayState.init = function(data) {
   this.game.renderer.renderSession.roundPixels = true;
@@ -235,7 +235,6 @@ PlayState.preload = function() {
   this.game.load.json('level:3', 'data/level03.json');
   this.game.load.json('level:4', 'data/level04.json');
   this.game.load.json('level:5', 'data/level05.json');
-  this.game.load.json('level:6', 'data/level06.json');
 };
 
 PlayState._loadLevel = function(data) {
@@ -357,16 +356,15 @@ PlayState._heroVsCoin = function(hero, coin) {
 };
 
 PlayState._heroVsEnemy = function(hero, enemy) {
-  let heroPosition = this.game.cache.getJSON(`level:${this.level}`).hero;
-  let keyPosition = this.game.cache.getJSON(`level:${this.level}`).key;
+  let gameCache = this.game.cache.getJSON(`level:${this.level}`);
   hero.body.velocity.y > 0 ? (
     this.sfx.stomp.play(),
     this.level === 3 ? hero.bounce(630) : hero.bounce(200),
     enemy.die()
   ) : (
     this.sfx.stomp.play(),
-    this.hero.reset(heroPosition.x, heroPosition.y),
-    this.key.reset(keyPosition.x, keyPosition.y),
+    this.hero.reset(gameCache.hero.x, gameCache.hero.y),
+    this.key.reset(gameCache.key.x, gameCache.key.y),
     this.hasKey = false
   );
 };
