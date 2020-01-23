@@ -4,13 +4,13 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "electron ."
   },
   "devDependencies": {
     "electron": "^2.0.18",
     "electron-packager": "^12.2.0"
   },
   "author": "Alexander Weiß, Leon Ebel",
+  "contributors": ["Lukas Jocham"],
   "license": "ISC"
 }
