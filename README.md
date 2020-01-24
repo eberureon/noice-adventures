@@ -1,3 +1,1 @@
-# niceAdventures
-
-![]("./images/background.png")
+# spielSchule
