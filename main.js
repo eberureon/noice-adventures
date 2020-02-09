@@ -1,10 +1,14 @@
-const {app, BrowserWindow} = require('electron');
+const { app, BrowserWindow } = require('electron');
+const path = require('path');
 
 let win;
 
 function createWindow () {
-  // win = new BrowserWindow({width: 974, height: 640}); // MAC OS optimal Size
-  win = new BrowserWindow({width: 991, height: 655}); // Windows optimal Size
+  win = new BrowserWindow({
+    width: 975,
+    height: 620,
+    icon: path.join(__dirname + '/images/logo.png'),
+  });
   
   win.setMenu(null);
   win.loadFile('index.html');
