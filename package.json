@@ -1,7 +1,7 @@
 {
-  "name": "spielschule",
+  "name": "noice-adventures",
   "version": "1.0.0",
-  "description": "",
+  "description": "Small arcade game which was made in the course of a school project. In corporation with @alexwe1ss.",
   "main": "main.js",
   "dependencies": {},
   "devDependencies": {
@@ -13,5 +13,5 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Alexander Weiß, Leon Ebel",
-  "license": "ISC"
+  "license": "ISC",
 }
