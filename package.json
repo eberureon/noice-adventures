@@ -8,13 +8,13 @@
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "build:all": "electron-builder -mwl --x64",
-    "build:win": "electron-builder -w",
-    "build:mac": "electron-builder -m",
-    "build:linux": "electron-builder -l"
+    "build:win": "electron-builder -w --x64 --ia32 --publish=never",
+    "build:mac": "electron-builder -m --publish=never",
+    "build:linux": "electron-builder -l --publish=never"
   },
   "dependencies": {},
   "devDependencies": {
-    "electron": "^2.0.18",
+    "electron": "^8.0.0",
     "electron-builder": "^22.3.2"
   },
   "author": "Alexander Weiß, Leon Ebel",
