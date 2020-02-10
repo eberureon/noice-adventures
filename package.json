@@ -3,18 +3,24 @@
   "version": "1.0.0",
   "description": "Small arcade game which was made in the course of a school project. In corporation with @alexwe1ss.",
   "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "build:all": "electron-builder -mwl --x64",
+    "build:win": "electron-builder -w",
+    "build:mac": "electron-builder -m",
+    "build:linux": "electron-builder -l"
+  },
   "dependencies": {},
   "devDependencies": {
     "electron": "^2.0.18",
-    "electron-packager": "^12.1.0"
-  },
-  "scripts": {
-    "start": "electron .",
-    "build:win": "electron-packager . --platform=win32 --arch=x64 --out=dist/win --overwrite --prune=true --icon=images/logo.ico --asar",
-    "build:ios": "electron-packager . --platform=darwin --arch=x64 --out=dist/ios --overwrite --prune=true --icon=images/logo.ico --asar",
-    "build:linux": "electron-packager . --platform=linux --arch=x64 --out=dist/linux --overwrite --prune=true --icon=images/logo.ico --asar",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "electron-builder": "^22.3.2"
   },
   "author": "Alexander Weiß, Leon Ebel",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ebelleon/noice-adventures"
+  },
   "license": "ISC"
 }

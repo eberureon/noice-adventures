@@ -1,0 +1,37 @@
+appId: 'noice-adventures'
+productName: 'Noice Adventures'
+artifactName: '${productName}.${ext}'
+directories:
+  output: dist
+  buildResources: build
+extends: null
+files:
+  - '!{dist,.gitignore,.vscode}'
+
+win:
+  icon: build/icon.ico
+  target:
+    - target:
+        - nsis
+      arch:
+        - x64
+        - ia32
+nsis:
+  oneClick: true
+  perMachine: true
+  allowElevation: true
+  allowToChangeInstallationDirectory: true
+
+mac:
+  icon: build/icon.icns
+  target: dmg
+  category: public.app-category.games
+
+linux:
+  target: AppImag
+  synopsis: 'Jump & Run game for a some fun'
+  category: 'Game'
+
+asar: true
+compression: 'maximum'
+publish: never
