@@ -207,34 +207,34 @@ PlayState.updateTimer = function () {
 
 // load all necessary resources
 PlayState.preload = function() {
-  this.game.load.image('background', 'images/background.png');
-  this.game.load.image('ground', 'images/ground.png');
-  this.game.load.image('grass:8x1', 'images/grass_8x1.png');
-  this.game.load.image('grass:6x1', 'images/grass_6x1.png');
-  this.game.load.image('grass:4x1', 'images/grass_4x1.png');
-  this.game.load.image('grass:2x1', 'images/grass_2x1.png');
-  this.game.load.image('grass:1x1', 'images/grass_1x1.png');
-  this.game.load.image('invisible-wall', 'images/invisible_wall.png');
-  this.game.load.image('icon:coin', 'images/coin_icon.png');
-  this.game.load.image('font:numbers', 'images/numbers.png');
-  this.game.load.image('key', 'images/key.png');
-  this.game.load.spritesheet('icon:key', 'images/key_icon.png', 34, 30);
-  this.game.load.spritesheet('door', 'images/door.png', 42, 66);
-  this.game.load.spritesheet('hero', 'images/hero.png', 36, 42);
-  this.game.load.spritesheet('coin', 'images/coin_animated.png', 22, 22);
-  this.game.load.spritesheet('spider', 'images/spider.png', 42, 32);
-  this.game.load.audio('sfx:jump', 'audio/jump.wav');
-  this.game.load.audio('sfx:coin', 'audio/coin.wav');
-  this.game.load.audio('sfx:stomp', 'audio/stomp.wav');
-  this.game.load.audio('sfx:key', 'audio/key.wav');
-  this.game.load.audio('sfx:nice', 'audio/nice.wav');
-  this.game.load.audio('bgm', ['audio/bgm.mp3', 'audio/bgm.ogg']);
-  this.game.load.json('level:0', 'data/level00.json');
-  this.game.load.json('level:1', 'data/level01.json');
-  this.game.load.json('level:2', 'data/level02.json');
-  this.game.load.json('level:3', 'data/level03.json');
-  this.game.load.json('level:4', 'data/level04.json');
-  this.game.load.json('level:5', 'data/level05.json');
+  this.game.load.image('background', 'src/assets/images/background.png');
+  this.game.load.image('ground', 'src/assets/images/ground.png');
+  this.game.load.image('grass:8x1', 'src/assets/images/grass_8x1.png');
+  this.game.load.image('grass:6x1', 'src/assets/images/grass_6x1.png');
+  this.game.load.image('grass:4x1', 'src/assets/images/grass_4x1.png');
+  this.game.load.image('grass:2x1', 'src/assets/images/grass_2x1.png');
+  this.game.load.image('grass:1x1', 'src/assets/images/grass_1x1.png');
+  this.game.load.image('invisible-wall', 'src/assets/images/invisible_wall.png');
+  this.game.load.image('icon:coin', 'src/assets/images/coin_icon.png');
+  this.game.load.image('font:numbers', 'src/assets/images/numbers.png');
+  this.game.load.image('key', 'src/assets/images/key.png');
+  this.game.load.spritesheet('icon:key', 'src/assets/images/key_icon.png', 34, 30);
+  this.game.load.spritesheet('door', 'src/assets/images/door.png', 42, 66);
+  this.game.load.spritesheet('hero', 'src/assets/images/hero.png', 36, 42);
+  this.game.load.spritesheet('coin', 'src/assets/images/coin_animated.png', 22, 22);
+  this.game.load.spritesheet('spider', 'src/assets/images/spider.png', 42, 32);
+  this.game.load.audio('sfx:jump', 'src/assets/audio/jump.wav');
+  this.game.load.audio('sfx:coin', 'src/assets/audio/coin.wav');
+  this.game.load.audio('sfx:stomp', 'src/assets/audio/stomp.wav');
+  this.game.load.audio('sfx:key', 'src/assets/audio/key.wav');
+  this.game.load.audio('sfx:nice', 'src/assets/audio/nice.wav');
+  this.game.load.audio('bgm', ['src/assets/audio/bgm.mp3', 'src/assets/audio/bgm.ogg']);
+  this.game.load.json('level:0', 'src/assets/data/level00.json');
+  this.game.load.json('level:1', 'src/assets/data/level01.json');
+  this.game.load.json('level:2', 'src/assets/data/level02.json');
+  this.game.load.json('level:3', 'src/assets/data/level03.json');
+  this.game.load.json('level:4', 'src/assets/data/level04.json');
+  this.game.load.json('level:5', 'src/assets/data/level05.json');
 };
 
 PlayState._loadLevel = function(data) {
