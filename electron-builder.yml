@@ -1,0 +1,50 @@
+appId: 'noice-adventures'
+productName: 'Noice Adventures'
+artifactName: '${name}-${version}-${os}.${ext}'
+directories:
+  output: dist
+  buildResources: build
+extends: null
+files:
+  - '**/*'
+  - '!**/{dist,.gitignore,.vscode}'
+  - "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}"
+  - "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}"
+  - "!**/node_modules/*.d.ts"
+  - "!**/node_modules/.bin"
+  - "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}"
+  - "!.editorconfig"
+  - "!**/._*"
+  - "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}"
+  - "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}"
+  - "!**/{appveyor.yml,.travis.yml,circle.yml}"
+  - "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
+
+win:
+  icon: build/icon.ico
+  target: nsis
+
+nsis:
+  oneClick: false
+  perMachine: true
+  installerHeaderIcon: build/icon.ico
+  installerIcon: build/icon.ico
+  uninstallerIcon: build/icon.ico
+  language: '1031'
+  allowElevation: true
+  allowToChangeInstallationDirectory: true
+
+mac:
+  icon: build/icon.icns
+  target: dmg
+  category: public.app-category.games
+
+linux:
+  target:
+    - deb
+    - AppImag
+  synopsis: Jump & Run game for a some fun
+  category: Game
+
+asar: true
+compression: maximum
