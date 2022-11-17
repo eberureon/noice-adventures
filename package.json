@@ -13,10 +13,9 @@
     "build:mac": "electron-builder -m --publish=never",
     "build:linux": "electron-builder -l --publish=never"
   },
-  "dependencies": {},
   "devDependencies": {
-    "electron": "^9.3.1",
-    "electron-builder": "^22.8.0"
+    "electron": "^6.1.12",
+    "electron-builder": "^22.10.3"
   },
   "author": "Alexander Weiß, Leon Ebel",
   "repository": {
