@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "electron": "^6.1.12",
-    "electron-builder": "^22.10.3"
+    "electron-builder": "^23.6.0"
   },
   "author": "Alexander Weiß, Leon Ebel",
   "repository": {
