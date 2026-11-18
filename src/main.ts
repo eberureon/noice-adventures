@@ -31,7 +31,7 @@ function getPlatformIcon(filename: string): string {
     iconFilename = filename + '.png';
   }
 
-  return path.join(__dirname, 'build', iconFilename);
+  return path.join(__dirname, '..', 'build', iconFilename);
 }
 
 app.on('ready', createWindow);

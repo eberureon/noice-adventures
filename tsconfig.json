@@ -3,7 +3,7 @@
     "target": "ES2017",
     "module": "commonjs",
     "lib": ["ES2017", "DOM"],
-    "outDir": "./dist",
+    "outDir": "./dist-ts",
     "rootDir": "./src",
     "strict": false,
     "esModuleInterop": true,
@@ -16,6 +16,6 @@
     "removeComments": false,
     "typeRoots": ["./types", "./node_modules/@types"]
   },
-  "include": ["src-ts/**/*", "types/**/*"],
-  "exclude": ["node_modules", "dist", "build"]
+  "include": ["src/**/*", "types/**/*"],
+  "exclude": ["node_modules", "dist", "dist-ts", "build", "src/assets"]
 }
