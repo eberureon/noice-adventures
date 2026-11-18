@@ -4,6 +4,10 @@
   "description": "Small arcade game which was made in the course of a school project. In corporation with @alexwe1ss.",
   "main": "main.js",
   "scripts": {
+    "build:ts": "tsc",
+    "build:watch": "tsc --watch",
+    "prebuild": "npm run build:ts",
+    "prestart": "npm run build:ts",
     "start": "electron .",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
@@ -14,8 +18,11 @@
     "build:linux": "electron-builder -l --publish=never"
   },
   "devDependencies": {
-    "electron": "^37.2.5",
-    "electron-builder": "^26.0.12"
+    "@types/node": "^24.19.2",
+    "electron": "^45.3.4",
+    "electron-builder": "^26.18.0",
+    "phaser-ce": "^2.21.0",
+    "typescript": "^7.0.2"
   },
   "author": "Alexander Weiß, Leon Ebel",
   "repository": {
